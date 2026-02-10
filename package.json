@@ -1,0 +1,9 @@
+{
+  "name": "portfolio-project",
+  "version": "1.0.0",
+  "description": "Portfolio and contact form",
+  "private": true,
+  "scripts": {
+    "build": "echo 'Frontend is static - no build needed'"
+  }
+}
