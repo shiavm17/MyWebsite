@@ -91,19 +91,11 @@ document.getElementById('contact-form').addEventListener('submit', async functio
     submitBtn.textContent = 'Sending...';
     submitBtn.disabled = true;
 
-    // Determine API URL
-    // If hosted (production) or served by backend (localhost:3000), relative path works.
-    // But for local dev via Live Server (port 5500) or file://, we need absolute URL to backend.
-    const isBackendServing = window.location.port === '3000'; // Assuming backend runs on 3000
-    const isProduction = window.location.hostname !== 'localhost' && window.location.protocol !== 'file:';
-    
-    let apiUrl = '/api/contact';
-    if (!isProduction && !isBackendServing) {
-        apiUrl = 'http://localhost:3000/api/contact';
-    }
+    // Use Supabase Edge Function
+    const apiUrl = 'https://nfhaxsvedbtlacsmkshf.supabase.co/functions/v1/contact-form';
 
     try {
-        // Send data to backend
+        // Send data to Supabase Edge Function
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {
@@ -134,7 +126,7 @@ document.getElementById('contact-form').addEventListener('submit', async functio
     } catch (error) {
         console.error('Error:', error);
         formMessage.className = 'mt-4 p-4 rounded-lg bg-red-100 text-red-800';
-        formMessage.textContent = `Failed to send message: ${error.message}. Ensure backend is running on port 3000.`;
+        formMessage.textContent = `Failed to send message: ${error.message}. Please try again.`;
     } finally {
         // Reset button state
         submitBtn.textContent = originalBtnText;
