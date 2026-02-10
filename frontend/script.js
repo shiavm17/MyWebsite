@@ -112,14 +112,15 @@ document.getElementById('contact-form').addEventListener('submit', async functio
             body: JSON.stringify({ name, email, subject, message })
         });
 
-        const responseText = await response.text();
-        console.log('Raw Response:', responseText);
-
+        const contentType = response.headers.get('content-type') || '';
         let data;
-        try {
-            data = JSON.parse(responseText);
-        } catch (e) {
-            throw new Error(`Server returned non-JSON response: ${responseText.substring(0, 50)}...`);
+
+        if (contentType.includes('application/json')) {
+            data = await response.json();
+        } else {
+            const text = await response.text();
+            console.log('Non-JSON response received:', text);
+            throw new Error(`Server returned non-JSON response (status ${response.status}): ${text.substring(0, 120)}...`);
         }
 
         if (response.ok) {
