@@ -1,0 +1,307 @@
+/* Game Container - Fixed Bottom Right */
+#robot-game-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Minimized State */
+#game-toggle-btn {
+    width: 60px;
+    height: 60px;
+    background: #2563eb;
+    border-radius: 50%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 4px solid white;
+}
+
+#game-toggle-btn:hover {
+    transform: scale(1.1) rotate(10deg);
+}
+
+#game-toggle-btn svg {
+    width: 30px;
+    height: 30px;
+    color: white;
+}
+
+/* Expanded State */
+#game-board {
+    width: 350px;
+    height: 500px;
+    background: #1e293b;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    display: none;
+    position: relative;
+    border: 4px solid #3b82f6;
+    flex-direction: column;
+}
+
+#game-board.open {
+    display: flex;
+    animation: popUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popUp {
+    from {
+        transform: scale(0) translate(100px, 100px);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1) translate(0, 0);
+        opacity: 1;
+    }
+}
+
+/* Header */
+.game-header {
+    padding: 10px 15px;
+    background: #0f172a;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    border-bottom: 1px solid #334155;
+}
+
+.game-title {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.close-game {
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.close-game:hover {
+    opacity: 1;
+}
+
+/* Workspace (Canvas) */
+#game-canvas-area {
+    flex-grow: 1;
+    position: relative;
+    background-color: #334155;
+    background-image: radial-gradient(#475569 1px, transparent 1px);
+    background-size: 20px 20px;
+    overflow: hidden;
+    user-select: none;
+}
+
+/* Component Palette */
+#component-palette {
+    height: 80px;
+    background: #0f172a;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 10px;
+    border-top: 1px solid #334155;
+}
+
+.palette-item {
+    width: 50px;
+    height: 50px;
+    background: #1e293b;
+    border: 2px solid #475569;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    transition: all 0.2s;
+}
+
+.palette-item:hover {
+    border-color: #3b82f6;
+    background: #334155;
+}
+
+.palette-item span {
+    font-size: 10px;
+    color: #94a3b8;
+    margin-top: 4px;
+}
+
+.palette-icon {
+    font-size: 20px;
+}
+
+/* Game Components on Board */
+.circuit-component {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: #1e293b;
+    border: 2px solid #64748b;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    z-index: 10;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.circuit-component.dragging {
+    cursor: grabbing;
+    opacity: 0.8;
+    z-index: 20;
+}
+
+.circuit-component.active {
+    border-color: #fbbf24;
+    box-shadow: 0 0 15px rgba(251, 191, 36, 0.3);
+}
+
+.component-icon {
+    font-size: 24px;
+}
+
+/* Terminals */
+.terminal {
+    width: 12px;
+    height: 12px;
+    background: #94a3b8;
+    border-radius: 50%;
+    position: absolute;
+    cursor: crosshair;
+    border: 2px solid #1e293b;
+    transition: background 0.2s;
+}
+
+.terminal:hover {
+    background: #3b82f6;
+    transform: scale(1.2);
+}
+
+.terminal.connected {
+    background: #22c55e;
+}
+
+/* Positions for terminals based on component type */
+.terminal-left {
+    left: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.terminal-right {
+    right: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Wires (SVG) */
+#wire-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.wire {
+    stroke: #ef4444;
+    /* Red wire */
+    stroke-width: 3;
+    fill: none;
+    stroke-linecap: round;
+}
+
+.wire.active {
+    stroke: #fbbf24;
+    /* Glowing yellow when active */
+    stroke-width: 4;
+    filter: drop-shadow(0 0 4px #fbbf24);
+}
+
+/* Switch specific */
+.switch-toggle {
+    width: 30px;
+    height: 14px;
+    background: #475569;
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+}
+
+.switch-toggle::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 10px;
+    height: 10px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.2s;
+}
+
+.circuit-component.closed .switch-toggle {
+    background: #22c55e;
+}
+
+.circuit-component.closed .switch-toggle::after {
+    transform: translateX(16px);
+}
+
+/* Overlays */
+.game-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.95);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 100;
+    color: white;
+    padding: 20px;
+}
+
+.game-btn {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background 0.2s;
+}
+
+.game-btn:hover {
+    background: #1d4ed8;
+}
+
+.controls-hint {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 11px;
+    color: #94a3b8;
+    pointer-events: none;
+}
